@@ -6,6 +6,7 @@ import { Code, Briefcase, User, Wrench, Star, Phone, ChevronDown, ExternalLink, 
 import { useTheme } from '../context/ThemeContext';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { TubelightNavbar } from '../components/ui/tubelight-navbar';
+import { projects } from '../data/projects';
 import profilePhoto from '../components/photu.jpeg';
 
 const sections = [
@@ -21,90 +22,28 @@ const sections = [
 const services = [
   {
     id: 1,
-    title: 'Full Stack Development',
-    description: 'Building responsive web applications using React, Next.js, and Node.js with modern UI/UX principles.'
+    title: 'AI SaaS Engineering',
+    description: 'Building full-stack products with auth, billing, credits, dashboards, reports, and production-ready AI workflows.'
   },
   {
     id: 2,
-    title: 'Machine Learning Solutions',
-    description: 'Developing ML-powered applications using TensorFlow, PyTorch, and LangChain for intelligent automation.'
+    title: 'Realtime Voice AI',
+    description: 'Shipping low-latency interview and assistant experiences with Gemini Live, AWS Nova Sonic, WebSockets, and telephony bridges.'
   },
   {
     id: 3,
-    title: 'Cloud & DevOps',
-    description: 'Implementing cloud solutions with AWS, Docker containers, and RESTful APIs for scalable applications.'
+    title: 'Edge & Product Infrastructure',
+    description: 'Designing tenant-aware data models, RBAC, audit logs, payments, analytics, and Cloudflare/AWS deployments.'
   }
 ];
 
 const skills = [
-  { name: 'React/Next.js', level: 90 },
-  { name: 'TypeScript/JavaScript', level: 90 },
-  { name: 'Python/TensorFlow', level: 85 },
-  { name: 'Node.js/Express', level: 85 },
-  { name: 'Docker/AWS', level: 80 },
-  { name: 'MongoDB/MySQL', level: 75 }
-];
-
-export const projects = [
-  {
-    id: 'vidgenix',
-    title: 'VidGenix',
-    description: 'AI-powered Video Generation Platform',
-    type: 'AI — FULL STACK',
-    image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&h=400&q=80',
-    details: {
-      overview: 'An advanced AI platform that transforms text into fully produced videos, leveraging cutting-edge language and image generation models.',
-      features: [
-        'Text-to-video generation using Groq LLaMa 3.3 70B',
-        'Automated image generation with Flux model',
-        'Realistic narration using Deepgram TTS',
-        'Optimized video assembly with FFmpeg',
-        'Responsive UI built with Next.js and Tailwind CSS',
-        'User authentication with Clerk'
-      ],
-      technologies: ['Next.js', 'React', 'Tailwind CSS', 'FFmpeg', 'Groq LLaMa', 'Flux', 'Deepgram'],
-      github: 'https://github.com/mritunjaichauhan/VidgenX'
-    }
-  },
-  {
-    id: 'soundscout',
-    title: 'Sound Scout',
-    description: 'AI Music Platform',
-    type: 'AI — ANALYTICS — FULL STACK',
-    image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=400&q=80',
-    details: {
-      overview: 'A sophisticated music analytics platform that analyzes user preferences and provides AI-powered music recommendations.',
-      features: [
-        'Integration with Spotify APIs for music analysis',
-        'Analysis of 5,000+ tracks from 1950-2019',
-        'Enhanced song recommendation algorithms',
-        'AI chatbot using Gemini API',
-        'Musical feature extraction',
-        'AI music generation with SunoAI'
-      ],
-      technologies: ['React', 'Node.js', 'Spotify API', 'Gemini API', 'SunoAI', 'Python', 'TensorFlow'],
-      demo: 'https://sound-scout.streamlit.app/'
-    }
-  },
-  {
-    id: 'codesphere',
-    title: 'Code Sphere',
-    description: 'Cloud-based IDE',
-    type: 'CLOUD — FULL STACK',
-    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=400&q=80',
-    details: {
-      overview: 'A collaborative cloud-based IDE enabling real-time code editing and execution, similar to Replit.',
-      features: [
-        'Real-time collaborative coding',
-        'Multiple programming language support',
-        'Docker-based resource management',
-        'AWS cloud infrastructure',
-        'Integrated version control',
-        'Live code execution'
-      ],
-      technologies: ['React', 'Express.js', 'Docker', 'AWS', 'WebSocket', 'MongoDB']
-    }
-  }
+  { name: 'React, Next.js, TypeScript', level: 92 },
+  { name: 'Cloudflare Workers, Hono, Edge APIs', level: 88 },
+  { name: 'Convex, D1, Postgres-style Data Models', level: 86 },
+  { name: 'Gemini Live, Nova Sonic, AI Gateway', level: 88 },
+  { name: 'WorkOS Auth, RBAC, Razorpay Billing', level: 84 },
+  { name: 'WebSockets, Realtime Voice UX', level: 82 }
 ];
 
 const experiences = [
@@ -112,7 +51,7 @@ const experiences = [
     period: 'Feb 2025 - Present',
     role: 'Hirecentive',
     title: 'Software Developer Intern',
-    description: 'Developing web applications with Vite and Next.js, implementing user dashboards and integrating RESTful APIs.'
+    description: 'Building AI hiring and career products across placement management, resume SaaS, realtime voice interviews, coding assessments, RBAC, credits, billing, analytics, and edge infrastructure.'
   },
   {
     period: 'June 2024 - July 2024',
@@ -124,7 +63,7 @@ const experiences = [
     period: '2022 - 2026',
     role: 'Bennett University',
     title: 'BTECH CSE Student',
-    description: 'Pursuing Computer Science Engineering with focus on AI/ML and web technologies.'
+    description: 'Pursuing Computer Science Engineering with a focus on AI systems, full-stack product development, and cloud-native applications.'
   }
 ];
 
@@ -294,18 +233,28 @@ function HomePage() {
             Mritunjai Chauhan
           </motion.h1>
           <motion.p 
-            className="text-xl sm:text-2xl md:text-3xl font-bold mb-8 sm:mb-12"
+            className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            SOFTWARE DEVELOPER & ML ENTHUSIAST
+            FULL STACK AI ENGINEER FOR HIRING, VOICE AI, AND SAAS
+          </motion.p>
+          <motion.p
+            className={`max-w-3xl text-base sm:text-xl md:text-2xl leading-relaxed mb-8 sm:mb-12 ${
+              theme === 'dark' ? 'text-white/70' : 'text-black/70'
+            }`}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            I build production-oriented AI products across realtime interviews, resume intelligence, multi-tenant placement workflows, auth, payments, analytics, and edge infrastructure.
           </motion.p>
           <motion.div
             className="flex gap-6 mb-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
           >
             <a
               href="https://github.com/mritunjaichauhan"
@@ -329,7 +278,7 @@ function HomePage() {
             className={`group flex items-center gap-3 text-2xl font-bold hover:opacity-60 transition-opacity`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
             whileHover={{ x: 10 }}
           >
             <ChevronDown size={32} className="animate-bounce" />
@@ -353,8 +302,8 @@ function HomePage() {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                I'm currently pursuing my BTECH CSE at Bennett University, Greater Noida (2022-2026). As a passionate software developer
-                and machine learning enthusiast, I love building innovative solutions that combine web technologies with AI capabilities.
+                I am pursuing BTECH CSE at Bennett University while building production-grade AI and SaaS systems at Hirecentive.
+                My strongest work sits at the intersection of full-stack product engineering, realtime AI, and business-critical infrastructure.
               </motion.p>
               <motion.p
                 initial={{ opacity: 0, x: -50 }}
@@ -362,8 +311,17 @@ function HomePage() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                My journey includes valuable experience through internships at Hirecentive and the Department of Digital Technologies, where
-                I've worked on cutting-edge projects involving full-stack development, AI, and machine learning.
+                I have worked on multi-tenant university placement software, AI resume products, realtime voice interview simulators,
+                coding-assessment flows, credit ledgers, billing integrations, RBAC, analytics, and Cloudflare/AWS deployments.
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                viewport={{ once: true }}
+              >
+                I care about systems that ship: clean data models, secure auth boundaries, fast interfaces, measurable funnels,
+                and AI experiences that feel useful instead of decorative.
               </motion.p>
             </div>
           </AnimatedSection>
@@ -448,6 +406,11 @@ function HomePage() {
         >
           <AnimatedSection>
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-8 sm:mb-16">PROJECTS</h2>
+            <p className={`max-w-3xl text-lg sm:text-2xl leading-relaxed mb-8 sm:mb-12 ${
+              theme === 'dark' ? 'text-white/70' : 'text-black/70'
+            }`}>
+              Selected work from AI hiring, resume intelligence, realtime voice systems, payments, RBAC, and edge infrastructure.
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12">
               {projects.map((project, index) => (
                 <motion.div 
@@ -468,10 +431,7 @@ function HomePage() {
                   <motion.div 
                     className={`absolute inset-0 ${
                       theme === 'dark' ? 'bg-black/80' : 'bg-black/60'
-                    } p-4 sm:p-8 flex flex-col justify-end`}
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                    } p-4 sm:p-8 flex flex-col justify-end opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300`}
                   >
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2">{project.title}</h3>
                     <p className="text-base sm:text-lg md:text-xl text-white/80 mb-2 sm:mb-4">{project.description}</p>

@@ -18,13 +18,11 @@ interface NavBarProps {
 }
 
 export function TubelightNavbar({ items, className, activeSection, setActiveSection }: NavBarProps) {
-  const [isMobile, setIsMobile] = useState(false);
   const [isUltraSlim, setIsUltraSlim] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
       setIsUltraSlim(window.innerWidth < 360);
     };
 

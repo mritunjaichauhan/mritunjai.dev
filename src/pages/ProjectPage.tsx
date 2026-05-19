@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Github, ExternalLink } from 'lucide-react';
-import { projects } from '../pages/HomePage';
-import { Project } from '../types';
+import { projects } from '../data/projects';
+import type { Project } from '../types';
 import { useEffect } from 'react';
 
 function ProjectPage() {
@@ -50,6 +50,16 @@ function ProjectPage() {
           >
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-black mb-4 sm:mb-6">{project.title}</h1>
             <p className="text-lg sm:text-xl md:text-2xl text-white/60 mb-6 sm:mb-8">{project.description}</p>
+            <div className="flex flex-wrap gap-3 mb-6 sm:mb-8">
+              <span className="px-3 py-2 bg-white text-black rounded-lg text-xs sm:text-sm font-black tracking-wide">
+                {project.type}
+              </span>
+              {project.details.role && (
+                <span className="px-3 py-2 bg-white/10 rounded-lg text-xs sm:text-sm text-white/80">
+                  {project.details.role}
+                </span>
+              )}
+            </div>
             <div className="flex flex-wrap gap-3 mb-8 sm:mb-12">
               {project.details.github && (
                 <a
@@ -83,21 +93,43 @@ function ProjectPage() {
                 </p>
               </div>
 
+              {project.details.impact && (
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Impact</h2>
+                  <ul className="list-disc list-inside space-y-1 sm:space-y-2 text-white/80">
+                    {project.details.impact.map((item: string) => (
+                      <li key={item} className="text-base sm:text-lg">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Key Features</h2>
                 <ul className="list-disc list-inside space-y-1 sm:space-y-2 text-white/80">
-                  {project.details.features.map((feature: string, index: number) => (
-                    <li key={index} className="text-base sm:text-lg">{feature}</li>
+                  {project.details.features.map((feature: string) => (
+                    <li key={feature} className="text-base sm:text-lg">{feature}</li>
                   ))}
                 </ul>
               </div>
 
+              {project.details.architecture && (
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Architecture</h2>
+                  <ul className="list-disc list-inside space-y-1 sm:space-y-2 text-white/80">
+                    {project.details.architecture.map((item: string) => (
+                      <li key={item} className="text-base sm:text-lg">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Technologies Used</h2>
                 <div className="flex flex-wrap gap-2">
-                  {project.details.technologies.map((tech: string, index: number) => (
+                  {project.details.technologies.map((tech: string) => (
                     <span
-                      key={index}
+                      key={tech}
                       className="px-3 py-1 bg-white/10 rounded-full text-xs sm:text-sm"
                     >
                       {tech}
