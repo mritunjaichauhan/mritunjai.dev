@@ -1,544 +1,420 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { motion, useScroll } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { Code, Briefcase, User, Wrench, Star, Phone, ChevronDown, ExternalLink, FolderGit, Github, Linkedin } from 'lucide-react';
-import { useTheme } from '../context/theme';
-import { ThemeToggle } from '../components/ThemeToggle';
-import { TubelightNavbar } from '../components/ui/tubelight-navbar';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Topbar } from '../components/Topbar';
+import { WorkList } from '../components/WorkList';
 import { projects } from '../data/projects';
-import profilePhoto from '../components/photu.jpeg';
-
-const sections = [
-  { id: 'home', title: 'TOP', icon: Star },
-  { id: 'about', title: 'ABOUT ME', icon: User },
-  { id: 'services', title: 'MY SERVICES', icon: Wrench },
-  { id: 'skills', title: 'SKILLS', icon: Code },
-  { id: 'projects', title: 'PROJECTS', icon: FolderGit },
-  { id: 'experience', title: 'EXPERIENCES', icon: Briefcase },
-  { id: 'contact', title: 'CONTACT', icon: Phone }
-];
-
-const services = [
-  {
-    id: 1,
-    title: 'AI SaaS Engineering',
-    description: 'Building full-stack products with auth, billing, credits, dashboards, reports, and production-ready AI workflows.'
-  },
-  {
-    id: 2,
-    title: 'Realtime Voice AI',
-    description: 'Shipping low-latency interview and assistant experiences with Gemini Live, Amazon Nova Sonic, WebSockets, and telephony bridges.'
-  },
-  {
-    id: 3,
-    title: 'Edge & Product Infrastructure',
-    description: 'Designing tenant-aware data models, RBAC, audit logs, payments, analytics, and Cloudflare/AWS deployments.'
-  }
-];
-
-const skills = [
-  { name: 'React, Next.js, TypeScript', level: 92 },
-  { name: 'Cloudflare Workers, Hono, Edge APIs', level: 88 },
-  { name: 'Convex, D1, Postgres-style Data Models', level: 86 },
-  { name: 'Gemini Live, Amazon Nova Sonic, AI Gateway', level: 88 },
-  { name: 'WorkOS Auth, RBAC, Razorpay Billing', level: 84 },
-  { name: 'WebSockets, Realtime Voice UX', level: 82 }
-];
-
-const experiences = [
-  {
-    period: 'Feb 2025 - Present',
-    role: 'Hirecentive',
-    title: 'Software Developer Intern',
-    description: 'Building AI hiring and career products across placement management, resume SaaS, realtime voice interviews, coding assessments, RBAC, credits, billing, analytics, and edge infrastructure.'
-  },
-  {
-    period: 'June 2024 - July 2024',
-    role: 'Dept. of Digital Tech, Shimla',
-    title: 'Machine Learning Intern',
-    description: 'Developed NLP tools for document processing and created an AI-powered chatbot for information retrieval.'
-  },
-  {
-    period: '2022 - 2026',
-    role: 'Bennett University',
-    title: 'BTECH CSE Student',
-    description: 'Pursuing Computer Science Engineering with a focus on AI systems, full-stack product development, and cloud-native applications.'
-  }
-];
-
-function AnimatedSection({ children, className }: { children: React.ReactNode; className?: string }) {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
+import {
+  experiences,
+  heroStats,
+  marqueeItems,
+  nowCard,
+  profile,
+  stack,
+} from '../data/profile';
+import { useReveal, usePageMeta } from '../lib/hooks';
 
 function HomePage() {
-  const navigate = useNavigate();
   const location = useLocation();
-  const { theme } = useTheme();
-  const [activeSection, setActiveSection] = useState('home');
-  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
-  const { scrollYProgress } = useScroll();
+  useReveal();
+  usePageMeta(
+    'Mritunjai Chauhan — Engineer · Hiring AI · Voice AI · SaaS',
+    'Full-stack engineer building production AI products across hiring, real-time voice, and multi-tenant SaaS. Currently at Hirecentive.',
+  );
 
+  // Honor cross-page anchor scrolls (e.g. nav from a project detail page)
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
-
-      for (const section of sections) {
-        const element = sectionRefs.current[section.id];
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Handle scrolling to section based on navigation state
-  useEffect(() => {
-    if (location.state && location.state.scrollToSection) {
-      const sectionId = location.state.scrollToSection;
-      const sectionElement = sectionRefs.current[sectionId];
-      
-      if (sectionElement) {
-        // Use a small timeout to ensure the scroll happens after render
-        setTimeout(() => {
-          // Calculate position with offset to scroll a bit higher than the exact section start
-          const yOffset = -5; // Positive value scrolls higher (adjust as needed)
-          const y = sectionElement.getBoundingClientRect().top + window.pageYOffset - yOffset;
-          
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }, 100);
-      }
-      
-      // Clear the state to avoid scrolling again on future navigation
-      window.history.replaceState({}, document.title);
+    const state = location.state as { scrollTo?: string } | null;
+    if (state?.scrollTo) {
+      const id = state.scrollTo;
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        window.history.replaceState({}, document.title);
+      });
     }
   }, [location.state]);
 
-  const scrollToNextSection = () => {
-    const aboutSection = sectionRefs.current['about'];
-    aboutSection?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const featured = projects[0]; // PMS is the flagship
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      theme === 'dark' 
-        ? 'bg-black text-white' 
-        : 'bg-[#ffdb67] text-black'
-    }`}>
-      <ThemeToggle />
-      
-      {/* Progress Bar */}
-      <motion.div
-        className={`fixed top-0 left-0 right-0 h-1 z-50 hidden sm:block ${
-          theme === 'dark' ? 'bg-white' : 'bg-black'
-        }`}
-        style={{ scaleX: scrollYProgress }}
-        initial={{ scaleX: 0 }}
-      />
+    <>
+      <Topbar />
 
-      {/* Right Navigation */}
-      <motion.nav
-        aria-label="Section navigation"
-        className="fixed right-4 sm:right-8 lg:right-12 top-1/3 -translate-y-1/2 z-50 hidden sm:block"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
-        <ul className="space-y-4 sm:space-y-8">
-          {sections.map((section) => (
-            <motion.li 
-              key={section.id}
-              whileHover={{ x: -5 }}
-              transition={{ duration: 0.2 }}
-            >
-              <a
-                href={`#${section.id}`}
-                className={`flex items-center gap-2 sm:gap-3 group ${
-                  activeSection === section.id 
-                    ? (theme === 'dark' ? 'text-white' : 'text-black')
-                    : (theme === 'dark' ? 'text-white/40' : 'text-black/40')
-                }`}
-              >
-                <span className={`text-base sm:text-lg font-bold transition-all duration-300 group-hover:${
-                  theme === 'dark' ? 'text-white' : 'text-black'
-                }`}>
-                  {section.title}
-                </span>
-              </a>
-            </motion.li>
-          ))}
-        </ul>
-      </motion.nav>
-      
-      {/* Mobile Navigation with TubelightNavbar */}
-      <TubelightNavbar 
-        items={sections.map(section => ({
-          name: section.title,
-          url: `#${section.id}`,
-          icon: section.icon,
-          id: section.id
-        }))}
-        activeSection={activeSection}
-        setActiveSection={(sectionId: string) => {
-          const sectionElement = sectionRefs.current[sectionId];
-          if (sectionElement) {
-            sectionElement.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
-      />
+      {/* ─────────────────────────────── HERO ─────────────────────────────── */}
+      <header className="hero shell" id="top">
+        <div className="top reveal">
+          <div className="eyebrow no-rule">
+            <span className="num">01</span>
+            <span>Index / Portfolio</span>
+          </div>
+          <div className="meta">
+            {/* Name already in nav brand — hide on mobile to avoid duplication */}
+            <div className="hide-sm">
+              <b>{profile.name}</b>
+            </div>
+            <div>{profile.role}</div>
+            <div>{profile.location}</div>
+            <div>est. {profile.practiceSince}</div>
+          </div>
+        </div>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 md:px-16 lg:px-32">
-        <section 
-          id="home" 
-          ref={el => sectionRefs.current['home'] = el}
-          className="min-h-screen flex flex-col justify-center"
-        >
-          <motion.img
-            src={profilePhoto}
-            alt="Mritunjai Chauhan"
-            className="w-52 h-52 rounded-full mb-12 object-cover scale-125"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            whileHover={{ scale: 1.1 }}
-          />
-          <motion.h1 
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-4 sm:mb-8 leading-tight"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Mritunjai Chauhan
-          </motion.h1>
-          <motion.p 
-            className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            FULL STACK AI ENGINEER FOR HIRING, VOICE AI, AND SAAS
-          </motion.p>
-          <motion.p
-            className={`max-w-3xl text-base sm:text-xl md:text-2xl leading-relaxed mb-8 sm:mb-12 ${
-              theme === 'dark' ? 'text-white/70' : 'text-black/70'
-            }`}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            I build production-oriented AI products across realtime interviews, resume intelligence, multi-tenant placement workflows, auth, payments, analytics, and edge infrastructure.
-          </motion.p>
-          <motion.div
-            className="flex gap-6 mb-12"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-          >
-            <a
-              href="https://github.com/mritunjaichauhan"
-              aria-label="Open GitHub profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`hover:opacity-60 transition-opacity`}
-            >
-              <Github size={32} />
-            </a>
-            <a
-              href="https://linkedin.com/in/mritunjai-chauhan-903607251"
-              aria-label="Open LinkedIn profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`hover:opacity-60 transition-opacity`}
-            >
-              <Linkedin size={32} />
-            </a>
-          </motion.div>
-          <motion.button
-            onClick={scrollToNextSection}
-            className={`group flex items-center gap-3 text-2xl font-bold hover:opacity-60 transition-opacity`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            whileHover={{ x: 10 }}
-          >
-            <ChevronDown size={32} className="animate-bounce" />
-            <span className="group-hover:translate-x-2 transition-transform duration-300">
-              Scroll to learn more
+        <div className="title reveal">
+          <div className="super">
+            <span>★</span>
+            <span>Engineer at Hirecentive</span>
+          </div>
+          <h1 className="h-display">
+            <span className="hero-line">I build software that</span>
+            <span className="hero-line indent">
+              <em>ships</em> and stays shipped
+              <span className="hero-arrow">↘</span>
             </span>
-          </motion.button>
-        </section>
+            <span className="hero-line">— real-time systems,</span>
+            <span className="hero-line indent">multi-tenant SaaS.</span>
+          </h1>
+        </div>
 
-        <section 
-          id="about" 
-          ref={el => sectionRefs.current['about'] = el}
-          className="min-h-screen flex items-center"
-        >
-          <AnimatedSection>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-6 sm:mb-12">ABOUT ME</h2>
-            <div className="space-y-6 sm:space-y-8 text-lg sm:text-xl md:text-2xl leading-relaxed">
-              <motion.p
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-              >
-                I am pursuing BTECH CSE at Bennett University while building production-grade AI and SaaS systems at Hirecentive.
-                My strongest work sits at the intersection of full-stack product engineering, realtime AI, and business-critical infrastructure.
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                I have worked on multi-tenant university placement software, AI resume products, realtime voice interview simulators,
-                coding-assessment flows, credit ledgers, billing integrations, RBAC, analytics, and Cloudflare/AWS deployments.
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                viewport={{ once: true }}
-              >
-                I care about systems that ship: clean data models, secure auth boundaries, fast interfaces, measurable funnels,
-                and AI experiences that feel useful instead of decorative.
-              </motion.p>
+        <div className="bottom reveal">
+          {heroStats.map((s) => (
+            <div key={s.k} className="stat">
+              <div className="k">{s.k}</div>
+              <div className="v" dangerouslySetInnerHTML={{ __html: s.v }} />
             </div>
-          </AnimatedSection>
-        </section>
+          ))}
+        </div>
+      </header>
 
-        <section 
-          id="services" 
-          ref={el => sectionRefs.current['services'] = el}
-          className="min-h-screen flex items-center"
-        >
-          <AnimatedSection>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-8 sm:mb-16">MY SERVICES</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-12">
-              {services.map((service, index) => (
-                <motion.div 
-                  key={service.id}
-                  className={`${
-                    theme === 'dark' 
-                      ? 'bg-white/5 hover:bg-white/10' 
-                      : 'bg-black/5 hover:bg-black/10'
-                  } backdrop-blur-sm p-6 sm:p-12 rounded-2xl transition-all duration-300`}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -10, scale: 1.02 }}
-                >
-                  <h3 className="text-2xl sm:text-4xl font-bold mb-4 sm:mb-6">#{service.id}</h3>
-                  <h4 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">{service.title}</h4>
-                  <p className={`text-base sm:text-xl ${
-                    theme === 'dark' ? 'text-white/80' : 'text-black/80'
-                  }`}>{service.description}</p>
-                </motion.div>
-              ))}
+      {/* ─────────────────────────────── WORK ─────────────────────────────── */}
+      <section className="section shell" id="work">
+        <div className="work-head reveal">
+          <div>
+            <div className="eyebrow">
+              <span className="num">02</span>
+              <span>Selected Work</span>
             </div>
-          </AnimatedSection>
-        </section>
+            <h2 className="h2" style={{ marginTop: 18 }}>
+              Four products, <em>shipped at Hirecentive</em>
+            </h2>
+          </div>
+          <div className="lede">
+            Production AI SaaS across hiring, résumés, and <em>real-time voice</em> — schema to
+            edge.
+          </div>
+        </div>
 
-        <section 
-          id="skills" 
-          ref={el => sectionRefs.current['skills'] = el}
-          className="min-h-screen flex items-center"
-        >
-          <AnimatedSection>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-8 sm:mb-16">SKILLS</h2>
-            <div className="space-y-8 sm:space-y-12">
-              {skills.map((skill, index) => (
-                <motion.div 
-                  key={skill.name}
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="flex justify-between mb-2 sm:mb-4 text-lg sm:text-xl md:text-2xl font-bold">
-                    <span>{skill.name}</span>
-                    <span className="ml-4">{skill.level}%</span>
+        <div className="reveal">
+          <WorkList projects={projects} />
+        </div>
+
+        {/* Featured case study — flagship */}
+        {featured && (
+          <div className="feature reveal">
+            <div className="ftext">
+              <div className="pill">
+                <span className="dot" />
+                Featured · {featured.details.period ?? '2025'}
+              </div>
+              <h3 className="h2">
+                {featured.title} —{' '}
+                <em>{featured.variant ?? 'a multi-tenant placement OS'}</em>
+              </h3>
+              <p>{featured.details.overview}</p>
+              <div className="stack">
+                <div>
+                  <div className="k">Role</div>
+                  <div className="v">{featured.details.role?.split('—')[0]?.trim() ?? '—'}</div>
+                </div>
+                <div>
+                  <div className="k">Live</div>
+                  <div className="v">
+                    {featured.details.demo?.replace(/^https?:\/\//, '') ?? '—'}
                   </div>
-                  <div className={`h-2 sm:h-3 w-full ${
-                    theme === 'dark' ? 'bg-white/10' : 'bg-black/10'
-                  } rounded-full overflow-hidden`}>
-                    <motion.div
-                      className={`h-full ${
-                        theme === 'dark' ? 'bg-white' : 'bg-black'
-                      } rounded-full`}
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.level}%` }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                      viewport={{ once: true }}
-                    />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </AnimatedSection>
-        </section>
-
-        <section 
-          id="projects" 
-          ref={el => sectionRefs.current['projects'] = el}
-          className="min-h-screen flex items-center"
-        >
-          <AnimatedSection>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-8 sm:mb-16">PROJECTS</h2>
-            <p className={`max-w-3xl text-lg sm:text-2xl leading-relaxed mb-8 sm:mb-12 ${
-              theme === 'dark' ? 'text-white/70' : 'text-black/70'
-            }`}>
-              Selected work from AI hiring, resume intelligence, realtime voice systems, payments, RBAC, and edge infrastructure.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12">
-              {projects.map((project, index) => (
-                <motion.button
-                  type="button"
-                  key={project.id}
-                  aria-label={`Open ${project.title} project details`}
-                  className="group relative block w-full overflow-hidden rounded-2xl cursor-pointer aspect-video border-0 bg-transparent p-0 text-left text-inherit focus:outline-none focus-visible:ring-4 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent focus-visible:ring-current"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.02 }}
-                  onClick={() => navigate(`/project/${project.id}`)}
-                >
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <motion.div 
-                    className={`absolute inset-0 ${
-                      theme === 'dark' ? 'bg-black/80' : 'bg-black/60'
-                    } p-4 sm:p-8 flex flex-col justify-end opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300`}
-                  >
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 sm:mb-2">{project.title}</h3>
-                    <p className="text-base sm:text-lg md:text-xl text-white/80 mb-2 sm:mb-4">{project.description}</p>
-                    <p className="text-xs sm:text-sm font-bold text-white/60">{project.type}</p>
-                  </motion.div>
-                </motion.button>
-              ))}
-            </div>
-          </AnimatedSection>
-        </section>
-
-        <section 
-          id="experience" 
-          ref={el => sectionRefs.current['experience'] = el}
-          className="min-h-screen flex items-center"
-        >
-          <AnimatedSection>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-8 sm:mb-16">EXPERIENCES</h2>
-            <div className="space-y-8 sm:space-y-16">
-              {experiences.map((exp, index) => (
-                <motion.div 
-                  key={exp.period} 
-                  className={`border-l-4 ${
-                    theme === 'dark' ? 'border-white' : 'border-black'
-                  } pl-6 sm:pl-12 relative`}
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <div className={`absolute w-4 sm:w-6 h-4 sm:h-6 ${
-                    theme === 'dark' ? 'bg-white' : 'bg-black'
-                  } rounded-full -left-[10px] sm:-left-[14px] top-2`} />
-                  <p className="text-base sm:text-xl mb-2 sm:mb-4">{exp.period}</p>
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4">{exp.role}</h3>
-                  <p className="text-lg sm:text-xl md:text-2xl mb-2 sm:mb-4">{exp.title}</p>
-                  <p className={`text-base sm:text-lg md:text-xl ${
-                    theme === 'dark' ? 'text-white/80' : 'text-black/80'
-                  }`}>{exp.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </AnimatedSection>
-        </section>
-
-        <section 
-          id="contact" 
-          ref={el => sectionRefs.current['contact'] = el}
-          className="min-h-screen flex items-center"
-        >
-          <AnimatedSection>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-8 sm:mb-16">CONTACT</h2>
-            <div className="space-y-6 sm:space-y-8">
-              <motion.p 
-                className="text-xl sm:text-2xl md:text-3xl"
-                whileHover={{ x: 10 }}
-              >
-                <a 
-                  href="mailto:chauhanmritunjai@gmail.com" 
-                  className={`flex items-center gap-2 sm:gap-4 hover:opacity-60 transition-opacity group`}
-                >
-                  chauhanmritunjai@gmail.com
-                  <ExternalLink size={20} className="sm:w-8 sm:h-8 group-hover:rotate-45 transition-transform duration-300" />
-                </a>
-              </motion.p>
-              <motion.p 
-                className="text-xl sm:text-2xl md:text-3xl"
-                whileHover={{ x: 10 }}
-              >
-                <a 
-                  href="tel:+919816384043" 
-                  className={`flex items-center gap-2 sm:gap-4 hover:opacity-60 transition-opacity group`}
-                >
-                  +91 9816384043
-                  <Phone size={20} className="sm:w-8 sm:h-8 group-hover:rotate-45 transition-transform duration-300" />
-                </a>
-              </motion.p>
-              <div className="flex gap-6 mt-8">
-                <a
-                  href="https://github.com/mritunjaichauhan"
-                  aria-label="Open GitHub profile"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`hover:opacity-60 transition-opacity`}
-                >
-                  <Github size={32} />
-                </a>
-                <a
-                  href="https://linkedin.com/in/mritunjai-chauhan-903607251"
-                  aria-label="Open LinkedIn profile"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`hover:opacity-60 transition-opacity`}
-                >
-                  <Linkedin size={32} />
-                </a>
+                </div>
+                <div>
+                  <div className="k">Backend</div>
+                  <div className="v">Convex · 36 tables · 242 functions</div>
+                </div>
+                <div>
+                  <div className="k">Voice</div>
+                  <div className="v">Gemini Live · HMAC proxy</div>
+                </div>
               </div>
             </div>
-          </AnimatedSection>
-        </section>
-      </div>
-    </div>
+            <a
+              href={featured.details.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="placeholder live-window"
+              aria-label={`Open ${featured.title} live site in a new tab`}
+              style={{ display: 'block', textDecoration: 'none', cursor: 'pointer' }}
+            >
+              <img
+                className="live-window-img"
+                src="/pms-preview.jpg"
+                alt={`Live preview of ${featured.title}`}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <span className="tag">/pms · live</span>
+              <span className="visit-cta">
+                <span>Visit live</span>
+                <span style={{ fontFamily: 'var(--mono)' }}>↗</span>
+              </span>
+              <span className="meta">
+                pms.prepcv.com
+                <br />
+                Open ↗
+              </span>
+            </a>
+          </div>
+        )}
+
+        {/* Marquee of stack keywords */}
+        <div className="marquee" aria-hidden>
+          <div className="marquee-track">
+            {[...marqueeItems, ...marqueeItems].map((x, i) => (
+              <span key={i}>{x}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────── ABOUT ─────────────────────────────── */}
+      <section className="section shell about" id="about">
+        <div className="row">
+          <div className="reveal">
+            <div className="eyebrow">
+              <span className="num">03</span>
+              <span>About</span>
+            </div>
+            <h2 className="h2" style={{ marginTop: 18 }}>
+              A note on <em>practice</em>
+            </h2>
+          </div>
+          <div>
+            <div className="about-body reveal">
+              {profile.bio.map((p) => (
+                <p key={p} dangerouslySetInnerHTML={{ __html: p }} />
+              ))}
+            </div>
+
+            <div className="now-card reveal" style={{ marginTop: 36 }}>
+              <div className="head">
+                <h4>Now</h4>
+                <span className="when">{nowCard.updated}</span>
+              </div>
+              {nowCard.rows.map((r) => (
+                <div key={r.k} className="row-k">
+                  <div className="k">{r.k}</div>
+                  <div className="v" dangerouslySetInnerHTML={{ __html: r.v }} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────── EXPERIENCE ─────────────────────────────── */}
+      <section className="section shell" id="experience">
+        <div className="row">
+          <div className="reveal">
+            <div className="eyebrow">
+              <span className="num">04</span>
+              <span>Experience</span>
+            </div>
+            <h2 className="h2" style={{ marginTop: 18 }}>
+              Where I've <em>been</em>
+            </h2>
+          </div>
+          <div className="reveal" style={{ borderTop: '1px solid var(--rule)' }}>
+            {experiences.map((e) => (
+              <div
+                key={e.period}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '160px 1fr',
+                  gap: 24,
+                  padding: '22px 0',
+                  borderBottom: '1px solid var(--rule)',
+                  alignItems: 'baseline',
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: 'var(--mono)',
+                    fontSize: 11,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink-3)',
+                  }}
+                >
+                  {e.period}
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: 'var(--serif)',
+                      fontSize: 24,
+                      lineHeight: 1.15,
+                      color: 'var(--ink)',
+                    }}
+                  >
+                    {e.org}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: 'var(--mono)',
+                      fontSize: 11.5,
+                      color: 'var(--ink-3)',
+                      marginTop: 2,
+                    }}
+                  >
+                    {e.title}
+                  </div>
+                  <p
+                    style={{
+                      margin: '10px 0 0',
+                      fontSize: 15,
+                      lineHeight: 1.6,
+                      color: 'var(--ink-2)',
+                      maxWidth: '52ch',
+                    }}
+                  >
+                    {e.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────── STACK ─────────────────────────────── */}
+      <section className="section shell" id="stack">
+        <div className="row">
+          <div className="reveal">
+            <div className="eyebrow">
+              <span className="num">05</span>
+              <span>Stack</span>
+            </div>
+            <h2 className="h2" style={{ marginTop: 18 }}>
+              The <em>kit</em>
+            </h2>
+          </div>
+          <div className="reveal" style={{ borderTop: '1px solid var(--rule)' }}>
+            {stack.map((row) => (
+              <div
+                key={row.category}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '160px 1fr',
+                  gap: 24,
+                  padding: '14px 0',
+                  borderBottom: '1px solid var(--rule)',
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: 'var(--mono)',
+                    fontSize: 11,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: 'var(--ink-3)',
+                  }}
+                >
+                  {row.category}
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'var(--mono)',
+                    fontSize: 13,
+                    color: 'var(--ink)',
+                    lineHeight: 1.7,
+                  }}
+                >
+                  {row.items.join(' · ')}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────── CONTACT ─────────────────────────────── */}
+      <section className="section contact shell" id="contact">
+        <div className="reveal">
+          <div className="eyebrow">
+            <span className="num">06</span>
+            <span>Contact</span>
+          </div>
+          <h2 className="big" style={{ marginTop: 24 }}>
+            Let's make
+            <br />
+            <em>something</em> good.
+            <br />
+            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          </h2>
+        </div>
+
+        <div className="row2 reveal">
+          <div className="blk">
+            <h5>Currently</h5>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 15,
+                color: 'var(--ink-2)',
+                maxWidth: '36ch',
+                lineHeight: 1.6,
+              }}
+            >
+              At Hirecentive shipping four production AI SaaS. Open to new roles in
+              founding-engineering, AI infra, or real-time systems. Full résumé linked.
+            </p>
+          </div>
+          <div className="blk">
+            <h5>Elsewhere</h5>
+            <ul>
+              <li>
+                <a href={profile.github} target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href="/resume">Résumé</a>
+              </li>
+            </ul>
+          </div>
+          <div className="blk">
+            <h5>Direct</h5>
+            <ul>
+              <li>
+                <a href={`mailto:${profile.email}`}>Email</a>
+              </li>
+              <li>
+                <a href={`tel:${profile.phone.replace(/\s/g, '')}`}>{profile.phone}</a>
+              </li>
+              <li>
+                <a href={profile.resumePdf} target="_blank" rel="noopener noreferrer">
+                  PDF Résumé
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="colophon">
+          <span>© {profile.name}. Built in India.</span>
+          <span>Set in Instrument Serif &amp; Inter Tight.</span>
+        </div>
+      </section>
+    </>
   );
 }
 

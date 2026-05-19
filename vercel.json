@@ -1,8 +1,17 @@
 {
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "/"
+      "source": "/project/pms",
+      "destination": "/project/placement-management-system",
+      "permanent": true
+    },
+    {
+      "source": "/project/prepcv2",
+      "destination": "/project/prepcv",
+      "permanent": true
     }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
   ]
 }

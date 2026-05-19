@@ -1,1 +1,6 @@
-/* /index.html 200
+# Legacy / renamed project routes — must come before the SPA fallback
+/project/pms        /project/placement-management-system   301
+/project/prepcv2    /project/prepcv                        301
+
+# SPA fallback — every other route falls through to index.html (React handles 404)
+/*  /index.html  200
