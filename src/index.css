@@ -28,3 +28,7 @@ section {
 section > div {
   animation: fadeIn 0.8s ease-out;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

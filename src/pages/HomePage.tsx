@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, useScroll } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Code, Briefcase, User, Wrench, Star, Phone, ChevronDown, ExternalLink, FolderGit, Github, Linkedin } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../context/theme';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { TubelightNavbar } from '../components/ui/tubelight-navbar';
 import { projects } from '../data/projects';
@@ -28,7 +28,7 @@ const services = [
   {
     id: 2,
     title: 'Realtime Voice AI',
-    description: 'Shipping low-latency interview and assistant experiences with Gemini Live, AWS Nova Sonic, WebSockets, and telephony bridges.'
+    description: 'Shipping low-latency interview and assistant experiences with Gemini Live, Amazon Nova Sonic, WebSockets, and telephony bridges.'
   },
   {
     id: 3,
@@ -41,7 +41,7 @@ const skills = [
   { name: 'React, Next.js, TypeScript', level: 92 },
   { name: 'Cloudflare Workers, Hono, Edge APIs', level: 88 },
   { name: 'Convex, D1, Postgres-style Data Models', level: 86 },
-  { name: 'Gemini Live, Nova Sonic, AI Gateway', level: 88 },
+  { name: 'Gemini Live, Amazon Nova Sonic, AI Gateway', level: 88 },
   { name: 'WorkOS Auth, RBAC, Razorpay Billing', level: 84 },
   { name: 'WebSockets, Realtime Voice UX', level: 82 }
 ];
@@ -159,7 +159,8 @@ function HomePage() {
       />
 
       {/* Right Navigation */}
-      <motion.nav 
+      <motion.nav
+        aria-label="Section navigation"
         className="fixed right-4 sm:right-8 lg:right-12 top-1/3 -translate-y-1/2 z-50 hidden sm:block"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -217,7 +218,7 @@ function HomePage() {
         >
           <motion.img
             src={profilePhoto}
-            alt="Profile"
+            alt="Mritunjai Chauhan"
             className="w-52 h-52 rounded-full mb-12 object-cover scale-125"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -258,6 +259,7 @@ function HomePage() {
           >
             <a
               href="https://github.com/mritunjaichauhan"
+              aria-label="Open GitHub profile"
               target="_blank"
               rel="noopener noreferrer"
               className={`hover:opacity-60 transition-opacity`}
@@ -266,6 +268,7 @@ function HomePage() {
             </a>
             <a
               href="https://linkedin.com/in/mritunjai-chauhan-903607251"
+              aria-label="Open LinkedIn profile"
               target="_blank"
               rel="noopener noreferrer"
               className={`hover:opacity-60 transition-opacity`}
@@ -413,9 +416,11 @@ function HomePage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12">
               {projects.map((project, index) => (
-                <motion.div 
+                <motion.button
+                  type="button"
                   key={project.id}
-                  className="group relative overflow-hidden rounded-2xl cursor-pointer aspect-video"
+                  aria-label={`Open ${project.title} project details`}
+                  className="group relative block w-full overflow-hidden rounded-2xl cursor-pointer aspect-video border-0 bg-transparent p-0 text-left text-inherit focus:outline-none focus-visible:ring-4 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent focus-visible:ring-current"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -437,7 +442,7 @@ function HomePage() {
                     <p className="text-base sm:text-lg md:text-xl text-white/80 mb-2 sm:mb-4">{project.description}</p>
                     <p className="text-xs sm:text-sm font-bold text-white/60">{project.type}</p>
                   </motion.div>
-                </motion.div>
+                </motion.button>
               ))}
             </div>
           </AnimatedSection>
@@ -512,6 +517,7 @@ function HomePage() {
               <div className="flex gap-6 mt-8">
                 <a
                   href="https://github.com/mritunjaichauhan"
+                  aria-label="Open GitHub profile"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`hover:opacity-60 transition-opacity`}
@@ -520,6 +526,7 @@ function HomePage() {
                 </a>
                 <a
                   href="https://linkedin.com/in/mritunjai-chauhan-903607251"
+                  aria-label="Open LinkedIn profile"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`hover:opacity-60 transition-opacity`}

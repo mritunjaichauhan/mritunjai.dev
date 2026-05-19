@@ -1,7 +1,8 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "mritunjai-dev",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Portfolio for Mritunjai Chauhan, focused on AI SaaS, realtime voice AI, and campus placement systems.",
   "type": "module",
   "scripts": {
     "dev": "vite",

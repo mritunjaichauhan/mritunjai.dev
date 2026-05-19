@@ -28,7 +28,8 @@ export const projects: Project[] = [
         'Cloudflare Workers and Hono API layer with oRPC, OpenAPI contracts, and two-layer rate limiting',
         'Shared package architecture across web, mobile, backend, and admin surfaces'
       ],
-      technologies: ['React', 'Next.js', 'TypeScript', 'Convex', 'Cloudflare Workers', 'Hono', 'oRPC', 'WorkOS', 'Expo', 'Tailwind CSS']
+      technologies: ['React', 'Next.js', 'TypeScript', 'Convex', 'Cloudflare Workers', 'Hono', 'oRPC', 'WorkOS', 'Expo', 'Tailwind CSS'],
+      caseStudy: 'https://github.com/mritunjaichauhan/engineering-case-studies/blob/main/case-studies/campus-placement-management-system.md'
     }
   },
   {
@@ -58,7 +59,8 @@ export const projects: Project[] = [
         'Fourteen-table D1/SQLite schema with 20 migrations for resumes, versions, payments, promo codes, cohorts, and conversations',
         'Payment and invoice lifecycle integrated with Razorpay and Zoho Books'
       ],
-      technologies: ['Next.js', 'TypeScript', 'Cloudflare Workers', 'OpenNext', 'D1', 'KV', 'Cloudflare AI Gateway', 'Vercel AI SDK', '@ai-sdk/google', 'Razorpay', 'Zoho Books', 'Drizzle', 'Tailwind CSS']
+      technologies: ['Next.js', 'TypeScript', 'Cloudflare Workers', 'OpenNext', 'D1', 'KV', 'Cloudflare AI Gateway', 'Vercel AI SDK', '@ai-sdk/google', 'Razorpay', 'Zoho Books', 'Drizzle', 'Tailwind CSS'],
+      caseStudy: 'https://github.com/mritunjaichauhan/engineering-case-studies/blob/main/case-studies/rebuildcv-ai-resume-saas.md'
     }
   },
   {
@@ -72,7 +74,7 @@ export const projects: Project[] = [
       overview: 'Built a voice-first interview-prep product that simulates high-stakes UK interview formats with realtime speech, station circuits, structured scoring, and final reports for learners.',
       impact: [
         'Created a domain-specific interview experience for Medical MMI, NHS, postgraduate, and admissions scenarios.',
-        'Solved Nova Sonic session limits with proactive hot-swap reconnects at 7:30 soft and 7:55 hard deadlines.',
+        'Solved Amazon Nova Sonic session limits with proactive hot-swap reconnects before provider limits.',
         'Connected authentication, billing, session storage, analytics, and report generation into the learner journey.'
       ],
       features: [
@@ -84,12 +86,13 @@ export const projects: Project[] = [
         'PostHog analytics for activation, interview completion, and learner behavior'
       ],
       architecture: [
-        'Browser client connected to a relay server for AWS Nova Sonic realtime speech sessions',
+        'Browser client connected to a relay server for Amazon Nova Sonic realtime speech sessions',
         'History-aware reconnect path with token refresh, silence-aware swapping, forced-swap fallback, and watchdog logging',
         'Session and billing boundaries designed for paid interview practice flows',
         'Analytics events mapped to product funnels and interview outcomes'
       ],
-      technologies: ['Next.js', 'TypeScript', 'AWS Nova Sonic', 'WebSocket', 'Passkeys', 'Google OAuth', 'KV Sessions', 'Autumn', 'PostHog', 'Tailwind CSS']
+      technologies: ['Next.js', 'TypeScript', 'Amazon Nova Sonic', 'WebSocket', 'Passkeys', 'Google OAuth', 'KV Sessions', 'Autumn', 'PostHog', 'Tailwind CSS'],
+      caseStudy: 'https://github.com/mritunjaichauhan/engineering-case-studies/blob/main/case-studies/prepviva-realtime-voice-interviews.md'
     }
   },
   {
@@ -120,7 +123,8 @@ export const projects: Project[] = [
         'Convex backend for attempts, reports, billing state, and user-linked interview data',
         'React Compiler enabled in production and object storage for resumes and artifacts used by the interview pipeline'
       ],
-      technologies: ['Next.js', 'React', 'TypeScript', 'Gemini Live', 'Vertex AI', 'Convex', 'Razorpay', 'Cloudflare R2', 'Yosys WASM', 'DigitalJS', 'React Compiler', 'WebSockets', 'Tailwind CSS']
+      technologies: ['Next.js', 'React', 'TypeScript', 'Gemini Live', 'Vertex AI', 'Convex', 'Razorpay', 'Cloudflare R2', 'Yosys WASM', 'DigitalJS', 'React Compiler', 'WebSockets', 'Tailwind CSS'],
+      caseStudy: 'https://github.com/mritunjaichauhan/engineering-case-studies/blob/main/case-studies/prepcv2-gemini-live-interview-prep.md'
     }
   }
 ];

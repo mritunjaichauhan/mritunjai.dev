@@ -1,12 +1,13 @@
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../context/theme';
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <motion.button
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
       onClick={toggleTheme}
       className={`fixed top-4 sm:top-8 right-4 sm:right-8 z-50 p-2 sm:p-3 rounded-full 
         ${theme === 'dark' ? 'bg-white text-black' : 'bg-black text-[#ffdb67]'}`}

@@ -13,5 +13,6 @@ export interface Project {
     technologies: string[];
     github?: string;
     demo?: string;
+    caseStudy?: string;
   };
 }

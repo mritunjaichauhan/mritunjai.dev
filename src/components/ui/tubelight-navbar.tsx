@@ -58,6 +58,7 @@ export function TubelightNavbar({ items, className, activeSection, setActiveSect
             <a
               key={item.id}
               href={item.url}
+              aria-label={`Go to ${item.name}`}
               onClick={(e) => {
                 e.preventDefault();
                 setActiveSection(item.id);
@@ -92,12 +93,6 @@ export function TubelightNavbar({ items, className, activeSection, setActiveSect
           );
         })}
       </div>
-      {/* Add scroll indicators for user awareness */}
-      <style jsx global>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </div>
   );
 }
